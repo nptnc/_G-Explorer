@@ -304,6 +304,7 @@ local getFromPath = function(path)
     return start
 end
 
+local lastCanvasPosition = {}
 generate = function(path)
     local GRAHHH = ""
     if path == "" or path == nil then
@@ -335,6 +336,7 @@ generate = function(path)
             if newPath == "" then
                 newPath = nil
             end
+            lastCanvasPosition[GRAHHH] = SidebarScroller.CanvasPosition
             generate(newPath)
         end)
     end
@@ -392,7 +394,7 @@ generate = function(path)
         createSection(`{index}`,{color = colors[typeof(value)] or Color3.fromRGB(255, 0, 0), index = tableindexes2[TYPE], type = TYPE},function()
             if typeof(value) == "table" then
                 local newPath = path == nil and index or `{path}/{index}`
-                print(newPath)
+                lastCanvasPosition[GRAHHH] = SidebarScroller.CanvasPosition
                 generate(newPath)
             elseif typeof(value) == "function" then
                 for _,instance in explorerInstances do
@@ -635,6 +637,9 @@ generate = function(path)
             end
         end)
     end)
+    if lastCanvasPosition[GRAHHH] then
+        SidebarScroller.CanvasPosition = lastCanvasPosition[GRAHHH]
+    end
 end
 
 generate()
