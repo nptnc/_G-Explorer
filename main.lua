@@ -23,31 +23,129 @@ end
 
 local ui = createInstance("ScreenGui",{
     Parent = game.Players.LocalPlayer.PlayerGui,
+    Name = "NipitikisExplorerThingyTwo",
     DisplayOrder = 999,
 })
 
-local frame = createInstance("Frame",{
-    Size = UDim2.new(0.25,0,0.3,0),
+local MainUI = createInstance("Frame",{
+    Size = UDim2.new(0.25,0,0.35,0),
     Parent = ui,
-    BorderSizePixel = 0,
-    BackgroundColor3 = Color3.fromRGB(23,23,23),
-    BackgroundTransparency = 0,
+    Name = "Wrapper",
+    BackgroundTransparency = 1,
     Position = UDim2.new(0.5,0,0.5,0),
     AnchorPoint = Vector2.new(0.5,0.5),
 })
-createInstance("UICorner",{Parent = frame})
+
+local ExplorerFrame = createInstance("Frame",{
+    Size = UDim2.new(1,0,0.95,0),
+    Position = UDim2.new(0,0,0.05,0),
+    Parent = MainUI,
+    Name = "Explorer",
+    BorderSizePixel = 0,
+    BackgroundColor3 = Color3.fromRGB(23,23,23),
+    BackgroundTransparency = 0,
+})
+createInstance("UICorner",{Parent = ExplorerFrame})
+
+local TopbarFrame = createInstance("Frame",{
+    Size = UDim2.new(0.7,0,0.08,0),
+    Position = UDim2.new(0,0,0,0),
+    Parent = MainUI,
+    Name = "Topbar",
+    BorderSizePixel = 0,
+    BackgroundColor3 = Color3.fromRGB(23,23,23),
+    BackgroundTransparency = 0,
+})
+createInstance("UICorner",{Parent = TopbarFrame, CornerRadius = UDim.new(0,5)})
+
+local TopbarButtons = createInstance("Frame",{
+    Size = UDim2.new(0.25,-2, 1,-5),
+    Position = UDim2.new(0.75,0, 0,5),
+    Parent = TopbarFrame,
+    Name = "Buttons",
+    BorderSizePixel = 0,
+    BackgroundTransparency = 1,
+})
+local TopbarClose = createInstance("TextButton",{
+    Size = UDim2.new(0.45,0, 1,0),
+    Position = UDim2.new(0.5,0, 0,0),
+    Parent = TopbarButtons,
+    Name = "Close",
+    BorderSizePixel = 0,
+    BackgroundColor3 = Color3.fromRGB(0,0,0),
+    BackgroundTransparency = 0.6,
+    TextColor3 = Color3.fromRGB(106,0,0),
+    Text = "X",
+})
+createInstance("UICorner",{Parent = TopbarClose})
+local TopbarMinimize = createInstance("TextButton",{
+    Size = UDim2.new(0.45,0, 1,0),
+    Position = UDim2.new(0,0, 0,0),
+    Parent = TopbarButtons,
+    Name = "Minimize",
+    BorderSizePixel = 0,
+    BackgroundColor3 = Color3.fromRGB(0,0,0),
+    BackgroundTransparency = 0.6,
+    TextColor3 = Color3.fromRGB(106,106,106),
+    Text = "-",
+})
+createInstance("UICorner",{Parent = TopbarMinimize})
+
+TopbarMinimize.MouseButton1Click:Connect(function()
+    ui.Enabled = not ui.Enabled
+    if isHours then
+        getrenv()._G.SetCameraLock(not ui.Enabled)
+    end
+end)
+
+local TopbarPath = createInstance("Frame",{
+    Size = UDim2.new(0.75,-10,1,-5),
+    Position = UDim2.new(0,7,0,5),
+    Parent = TopbarFrame,
+    Name = "Path",
+    BorderSizePixel = 0,
+    BackgroundColor3 = Color3.fromRGB(0,0,0),
+    BackgroundTransparency = 0.6,
+})
+createInstance("UICorner",{Parent = TopbarPath})
+local TopbarPathScroller = createInstance("ScrollingFrame",{
+    Size = UDim2.new(1,-10,1,-5),
+    Position = UDim2.new(0,0,0,0),
+    Parent = TopbarPath,
+    Name = "PathScroller",
+    BorderSizePixel = 0,
+    BackgroundColor3 = Color3.fromRGB(23,23,23),
+    BackgroundTransparency = 1,
+    ScrollingDirection = Enum.ScrollingDirection.X,
+    CanvasSize = UDim2.new(2.5,0, 2,0),
+    ScrollBarThickness = 0,
+})
+local TopbarPathScrollerText = createInstance("TextLabel",{
+    Size = UDim2.new(0,0,0,0),
+    Position = UDim2.new(0,8,0,6),
+    Parent = TopbarPathScroller,
+    Name = "PathText",
+    BorderSizePixel = 0,
+    BackgroundColor3 = Color3.fromRGB(23,23,23),
+    TextColor3 = Color3.fromRGB(103,103,103),
+    BackgroundTransparency = 1,
+    AutomaticSize = Enum.AutomaticSize.XY,
+    Text = "G:/",
+})
 
 
-local sidebarwrapperthingy = createInstance("Frame",{
-    Parent = frame,
-    Size = UDim2.new(0.36,0, 0.95,0),
-    Position = UDim2.new(0,7, 0,7),
+local Sidebar = createInstance("Frame",{
+    Parent = ExplorerFrame,
+    Name = "Sidebar",
+    Size = UDim2.new(0.36,0, 0.93,0),
+    Position = UDim2.new(0,7, 0.02,7),
     BorderSizePixel = 0,
     BackgroundTransparency = 0.6,
     BackgroundColor3 = Color3.fromRGB(0,0,0),
 })
-local sidebar = createInstance("ScrollingFrame",{
-    Parent = sidebarwrapperthingy,
+local SidebarScroller = createInstance("ScrollingFrame",{
+    Parent = Sidebar,
+    Name = "Scroller",
     Size = UDim2.new(0.95,0, 0.95,0),
     Position = UDim2.new(0,7, 0,7),
     BorderSizePixel = 0,
@@ -58,19 +156,20 @@ local sidebar = createInstance("ScrollingFrame",{
     ScrollingDirection = Enum.ScrollingDirection.Y,
     CanvasSize = UDim2.new(1,0,0,0)
 })
-createInstance("UICorner",{Parent = sidebarwrapperthingy})
+createInstance("UICorner",{Parent = Sidebar})
 
 local uill = createInstance("UIListLayout",{
-    Parent = sidebar,
+    Parent = SidebarScroller,
     SortOrder = Enum.SortOrder.LayoutOrder,
 })
 
 
 local explorer = createInstance("Frame",{
-    Parent = frame,
+    Parent = ExplorerFrame,
+    Name = "Panel",
     AnchorPoint = Vector2.new(1,0),
-    Size = UDim2.new(0.6,0,0.95,0),
-    Position = UDim2.new(1,-7,0,7),
+    Size = UDim2.new(0.6,0,0.93,0),
+    Position = UDim2.new(1,-7,0.02,7),
     BorderSizePixel = 0,
     BackgroundTransparency = 0.6,
     BackgroundColor3 = Color3.fromRGB(0,0,0),
@@ -94,7 +193,7 @@ local tableindexes = {
 
 local createSection = function(text,data,onClick)
     local sectionFrame = createInstance("Frame",{
-        Parent = sidebar,
+        Parent = SidebarScroller,
         AnchorPoint = Vector2.new(1,0),
         Size = UDim2.new(1,0,0,20),
         Position = UDim2.new(1,0,0,0),
@@ -206,6 +305,13 @@ local getFromPath = function(path)
 end
 
 generate = function(path)
+    local GRAHHH = ""
+    if path == "" or path == nil then
+        GRAHHH = "_G"
+    else
+        GRAHHH = `_G/{path}`
+    end
+    TopbarPathScrollerText.Text = GRAHHH
     local parent = getFromPath(path)
     for _,section in sections do
         section:Destroy()
@@ -233,7 +339,7 @@ generate = function(path)
         end)
     end
     local searchBox = createInstance("TextBox",{
-        Parent = sidebar,
+        Parent = SidebarScroller,
         Text = ``,
         PlaceholderText = "search",
         PlaceholderColor3 = Color3.fromRGB(75, 75, 75),
@@ -294,72 +400,224 @@ generate = function(path)
                 end
                 explorerInstances = {}
 
-                local instance1 = createInstance("TextButton",{
+                local instance = createInstance("TextLabel",{
                     Parent = explorer,
-                    Text = `call {index}`,
+                    Text = `Function: {index}`,
                     Size = UDim2.new(1,0,0.1,0),
+                    TextColor3 = Color3.fromRGB(109,109,109),
+                    BorderSizePixel = 0,
+                    BackgroundTransparency = 1,
                 })
 
-                local instance2 = createInstance("TextBox",{
+                local isTable = false
+                local arguments = 0
+                local correspondingArgUI = {}
+                local buttonPosY = 0.22
+                local toMove = {}
+
+                local isTableButton = createInstance("TextButton",{
                     Parent = explorer,
-                    Text = ``,
-                    PlaceholderText = "iggle, gaggle, 1, true",
-                    PlaceholderColor3 = Color3.fromRGB(95, 95, 95),
-                    Position = UDim2.new(0,0,0.1,0),
-                    Size = UDim2.new(1,0,0.1,0),
+                    Text = `Is Table: {isTable}`,
+                    AnchorPoint = Vector2.new(0.5,0),
+                    BorderColor3 = Color3.fromRGB(22,22,22),
+                    Position = UDim2.new(0.5,0,0.1,0),
+                    Size = UDim2.new(0.25,0, 0.1,0),
+                    TextColor3 = Color3.fromRGB(255,255,255),
+                    BackgroundColor3 = Color3.fromRGB(8,8,8),
                 })
 
-                instance1.MouseButton1Click:Connect(function()
-                    local args = string.split(instance2.Text,", ")
+                isTableButton.MouseButton1Click:Connect(function()
+                    isTable = not isTable
+                    isTableButton.Text = `Is Table: {isTable}`
+                    arguments = 0
+                    for _,arg in correspondingArgUI do
+                        if typeof(arg) == "table" then
+                            arg.index:Destroy()
+                            arg.value:Destroy()
+                            continue
+                        end
+                        arg:Destroy()
+                    end
+                    correspondingArgUI = {}
+                    for _,move in toMove do
+                        move.Position = UDim2.new(move.Position.X.Scale,move.Position.X.Offset,buttonPosY + 0.1 * arguments,0)
+                    end
+                end)
+
+                local instance3 = createInstance("TextButton",{
+                    Parent = explorer,
+                    Text = `Call`,
+                    BorderColor3 = Color3.fromRGB(22,22,22),
+                    Position = UDim2.new(0,7, buttonPosY,0),
+                    Size = UDim2.new(0.2,0, 0.1,0),
+                    TextColor3 = Color3.fromRGB(255,255,255),
+                    BackgroundColor3 = Color3.fromRGB(8,8,8),
+                })
+
+                local instance4 = createInstance("TextButton",{
+                    Parent = explorer,
+                    Text = `Arg`,
+                    BorderColor3 = Color3.fromRGB(22,22,22),
+                    Position = UDim2.new(0.225,7, buttonPosY,0),
+                    Size = UDim2.new(0.2,0, 0.1,0),
+                    TextColor3 = Color3.fromRGB(255,255,255),
+                    BackgroundColor3 = Color3.fromRGB(8,8,8),
+                })
+
+                local instance6 = createInstance("TextButton",{
+                    Parent = explorer,
+                    Text = `Remove Arg`,
+                    BorderColor3 = Color3.fromRGB(22,22,22),
+                    Position = UDim2.new(0.45,7, buttonPosY,0),
+                    Size = UDim2.new(0.25,0, 0.1,0),
+                    TextColor3 = Color3.fromRGB(255,255,255),
+                    BackgroundColor3 = Color3.fromRGB(8,8,8),
+                })
+
+                toMove = {
+                    instance3,
+                    instance4,
+                    instance6,
+                }
+
+                instance4.MouseButton1Click:Connect(function()
+                    arguments += 1
+                    for _,move in toMove do
+                        move.Position = UDim2.new(move.Position.X.Scale,move.Position.X.Offset,buttonPosY + 0.1 * arguments,0)
+                    end
+                    if isTable then
+                        local newArg = createInstance("TextBox",{
+                            Parent = explorer,
+                            Text = arguments,
+                            PlaceholderText = "Index",
+                            PlaceholderColor3 = Color3.fromRGB(95,95,95),
+                            Position = UDim2.new(0,7, 0.20 + (0.10 * math.clamp(arguments-1,0,100)),0),
+                            Size = UDim2.new(0.45,0, 0.1,0),
+                            BorderColor3 = Color3.fromRGB(22,22,22),
+                            BackgroundColor3 = Color3.fromRGB(8,8,8),
+                            TextColor3 = Color3.fromRGB(255,255,255),
+                        })
+                        local newArg2 = createInstance("TextBox",{
+                            Parent = explorer,
+                            Text = "",
+                            PlaceholderText = "Value",
+                            PlaceholderColor3 = Color3.fromRGB(95,95,95),
+                            AnchorPoint = Vector2.new(1,0),
+                            Position = UDim2.new(1,-7, 0.20 + (0.10 * math.clamp(arguments-1,0,100)),0),
+                            Size = UDim2.new(0.5,0, 0.1,0),
+                            BorderColor3 = Color3.fromRGB(22,22,22),
+                            BackgroundColor3 = Color3.fromRGB(8,8,8),
+                            TextColor3 = Color3.fromRGB(255,255,255),
+                        })
+                        correspondingArgUI[arguments] = {
+                            index = newArg,
+                            value = newArg2,
+                        }
+                        table.insert(explorerInstances, newArg)
+                        table.insert(explorerInstances, newArg2)
+                        return
+                    end
+                    local newArg = createInstance("TextBox",{
+                        Parent = explorer,
+                        Text = ``,
+                        PlaceholderText = "Argument",
+                        PlaceholderColor3 = Color3.fromRGB(95,95,95),
+                        Position = UDim2.new(0,7, 0.20 + (0.10 * math.clamp(arguments-1,0,100)),0),
+                        Size = UDim2.new(0.95,0, 0.1,0),
+                        BorderColor3 = Color3.fromRGB(22,22,22),
+                        BackgroundColor3 = Color3.fromRGB(8,8,8),
+                        TextColor3 = Color3.fromRGB(255,255,255),
+                    })
+                    correspondingArgUI[arguments] = newArg
+                    table.insert(explorerInstances, newArg)
+                end)
+
+                instance3.MouseButton1Click:Connect(function()
                     local newargs = {}
-                    for argIndex,argValue in args do
-                        newargs[argIndex] = figureOutVariable(argValue)
+                    if isTable then
+                        newargs[1] = {}
+                    end
+                    for argIndex,argValue in correspondingArgUI do
+                        if isTable then
+                            newargs[1][argValue.index.Text] = figureOutVariable(argValue.value.Text)
+                        else
+                            newargs[argIndex] = figureOutVariable(argValue.Text)
+                        end
                     end
                     value(table.unpack(newargs))
                 end)
 
-                table.insert(explorerInstances,instance1)
-                table.insert(explorerInstances,instance2)
+                instance6.MouseButton1Click:Connect(function()
+                    if arguments <= 0 then
+                        return
+                    end
+                    arguments -= 1
+                    for _,move in toMove do
+                        move.Position = UDim2.new(move.Position.X.Scale,move.Position.X.Offset,buttonPosY + 0.1 * arguments,0)
+                    end
+                    if typeof(correspondingArgUI[#correspondingArgUI]) == "table" then
+                        correspondingArgUI[#correspondingArgUI].index:Destroy()
+                        correspondingArgUI[#correspondingArgUI].value:Destroy()
+                        correspondingArgUI[#correspondingArgUI] = nil
+                        return
+                    end
+                    correspondingArgUI[#correspondingArgUI]:Destroy()
+                    correspondingArgUI[#correspondingArgUI] = nil
+                end)
+                
+                table.insert(explorerInstances,instance)
+                table.insert(explorerInstances,instance3)
+                table.insert(explorerInstances,instance4)
+                table.insert(explorerInstances,instance6)
+                table.insert(explorerInstances,isTableButton)
             else
                 for _,instance in explorerInstances do
                     instance:Destroy()
                 end
                 explorerInstances = {}
-                
+
                 local instance3432 = createInstance("TextLabel",{
                     Parent = explorer,
                     Text = `{index} [{typeof(value)}]`,
+                    Position = UDim2.new(0,0, 0,0),
+                    TextColor3 = Color3.fromRGB(109,109,109),
                     Size = UDim2.new(1,0,0.1,0),
+                    BorderSizePixel = 0,
+                    BackgroundColor3 = Color3.fromRGB(8,8,8),
+                    BackgroundTransparency = 1,
                 })
 
                 local instance0 = createInstance("TextLabel",{
                     Parent = explorer,
                     Text = `{tostring(value)}`,
-                    TextColor3 = Color3.fromRGB(255,255,255),
+                    TextColor3 = Color3.fromRGB(150,150,150),
                     Size = UDim2.new(1,0,0.1,0),
-                    Position = UDim2.new(0,0,0.1,0),
+                    BorderSizePixel = 0,
+                    Position = UDim2.new(0,0,0.05,0),
                     BackgroundColor3 = Color3.fromRGB(0,0,0),
-                    BackgroundTransparency = 0.6,
+                    BackgroundTransparency = 1,
                 })
 
                 local instance = createInstance("TextBox",{
                     Parent = explorer,
                     Text = ``,
-                    PlaceholderText = "Arguments",
+                    PlaceholderText = "Value",
                     PlaceholderColor3 = Color3.fromRGB(95,95,95),
-                    Position = UDim2.new(0,0, 0.25,0),
-                    Size = UDim2.new(1,0, 0.1,0),
-                    BackgroundColor3 = Color3.fromRGB(0,0,0),
-                    BackgroundTransparency = 0.6,
+                    BorderColor3 = Color3.fromRGB(22,22,22),
+                    Position = UDim2.new(0,7, 0.15,0),
+                    Size = UDim2.new(0.74,0, 0.1,0),
+                    BackgroundColor3 = Color3.fromRGB(8,8,8),
+                    TextColor3 = Color3.fromRGB(255,255,255),
                 })
 
                 local instance2 = createInstance("TextButton",{
                     Parent = explorer,
                     Text = `Set`,
-                    Position = UDim2.new(0,0, 0.35,0),
-                    Size = UDim2.new(1,0, 0.1,0),
-                    BackgroundColor3 = Color3.fromRGB(0,0,0),
-                    BackgroundTransparency = 0.6,
+                    BorderColor3 = Color3.fromRGB(22,22,22),
+                    Position = UDim2.new(0.75,7, 0.15,0),
+                    Size = UDim2.new(0.2,0, 0.1,0),
+                    TextColor3 = Color3.fromRGB(255,255,255),
+                    BackgroundColor3 = Color3.fromRGB(8,8,8),
                 })
 
                 instance2.MouseButton1Click:Connect(function()
@@ -381,7 +639,7 @@ end
 
 generate()
 
-local isHours = game.PlaceId == 5732973455
+isHours = game.PlaceId == 5732973455
 if isHours then
     getrenv()._G.SetCameraLock(not ui.Enabled)
 end
